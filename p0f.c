@@ -333,12 +333,12 @@ void start_observation(char* keyword, u8 field_cnt, u8 to_srv,
     time_t ut = get_unix_time();
     struct tm* lt = localtime(&ut);
 
-    strftime((char*)tmp, 64, "%Y/%m/%d %H:%M:%S", lt);
+    strftime((char*)tmp, 64, "%Y\%m\%d %H:%M:%S+00:00", lt);
 
-    LOGF("[%s] mod=%s|cli=%s/%u|",tmp, keyword, addr_to_str(f->client->addr,
+    LOGF("{\"ts\":\"%s\",\"mod\":\"%s\",\"cli_ip\":\"%s\",\"cli_port\":\"%u\"",tmp, keyword, addr_to_str(f->client->addr,
          f->client->ip_ver), f->cli_port);
 
-    LOGF("srv=%s/%u|subj=%s", addr_to_str(f->server->addr, f->server->ip_ver),
+    LOGF(",\"srv_ip\":\"%s\",\"src_port\":\"%u\",\"subj\":\"%s\"", addr_to_str(f->server->addr, f->server->ip_ver),
          f->srv_port, to_srv ? "cli" : "srv");
 
   }
@@ -357,7 +357,7 @@ void add_observation_field(char* key, u8* value) {
   if (!daemon_mode)
     SAYF("| %-8s = %s\n", key, value ? value : (u8*)"???");
 
-  if (log_file) LOGF("|%s=%s", key, value ? value : (u8*)"???");
+  if (log_file) LOGF(",\"%s\":\"%s\"", key, value ? value : (u8*)"???");
 
   obs_fields--;
 
@@ -365,7 +365,7 @@ void add_observation_field(char* key, u8* value) {
 
     if (!daemon_mode) SAYF("|\n`----\n\n");
 
-    if (log_file) LOGF("\n");
+    if (log_file) LOGF("}\n");
 
   }
 
