@@ -333,7 +333,7 @@ void start_observation(char* keyword, u8 field_cnt, u8 to_srv,
     time_t ut = get_unix_time();
     struct tm* lt = localtime(&ut);
 
-    strftime((char*)tmp, 64, "%Y/%m/%d %H:%M:%S", lt);
+    strftime((char*)tmp, 64, "%Y\%m\%d %H:%M:%S+00:00", lt);
 
     LOGF("{\"ts\":\"%s\",\"mod\":\"%s\",\"cli_ip\":\"%s\",\"cli_port\":\"%u\"",tmp, keyword, addr_to_str(f->client->addr,
          f->client->ip_ver), f->cli_port);
